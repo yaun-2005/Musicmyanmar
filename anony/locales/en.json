@@ -105,7 +105,7 @@
     "queue_fetching": "Fetching queue...",
     "restarting": "Restarting...",
     "restarted": "Restart in progress. Don't worry, it'll only take a few seconds… maybe.",
-    "start_pm":  "<tg-emoji emoji-id='6194853385124976458'>🤍</tg-emoji> нєу {0}\n<tg-emoji emoji-id='6120671736485649989'>🤍</tg-emoji> ๏ ᴛʜɪs ɪs {1} !\n\n<tg-emoji emoji-id='5316702348855227508'>🌈</tg-emoji> ➻ A fast & powerful Telegram music player bot.\n<blockquote><tg-emoji emoji-id='6208548360794677149'>🌈</tg-emoji> No ads • 24/7 uptime.\n<tg-emoji emoji-id='6208617694451736969'>🌈</tg-emoji> Fast • Smooth • Lag-free.\n<tg-emoji emoji-id='5469627494107748537'>🌈</tg-emoji> Play audio, video & Telegram files</blockquote>\n\n<tg-emoji emoji-id='5267500801240092311'>🌈</tg-emoji> Powered by<a href='https://t.me/LeyoxYan_Yan'>𝐘𝐚𝐧 𝐘𝐚𝐧</a>",
+    "start_pm":  "<tg-emoji emoji-id='6194853385124976458'>🤍</tg-emoji> нєу {0}\n<tg-emoji emoji-id='6120671736485649989'>🤍</tg-emoji> ๏ ᴛʜɪs ɪs {1} !\n\n<tg-emoji emoji-id='5316702348855227508'>🌈</tg-emoji> ➻ A fast & powerful Telegram music player bot.\n<blockquote><tg-emoji emoji-id='6208548360794677149'>🌈</tg-emoji> No ads • 24/7 uptime.\n<tg-emoji emoji-id='6208617694451736969'>🌈</tg-emoji> Fast • Smooth • Lag-free.\n<tg-emoji emoji-id='5469627494107748537'>🌈</tg-emoji> Play audio, video & Telegram files</blockquote>\n\n<tg-emoji emoji-id='5267500801240092311'>🌈</tg-emoji> Powered by ❖ <a href='https://t.me/LeyoxYan_Yan'>𝐘𝐚𝐧 𝐘𝐚𝐧</a>",
     "start_gp":  "Hey,\nThis is {0}\n\n<u><b>A music player bot with some awesome and useful features.</b></u>",
     "start_settings": "<u><b>{0} settings</b></u>\n\nClick the buttons below to change this chat's current settings.",
     "stats_fetching": "Fetching stats...",

@@ -13,7 +13,7 @@ class Inline:
         self.ikb = types.InlineKeyboardButton
 
     def cancel_dl(self, text) -> types.InlineKeyboardMarkup:
-        return self.ikm([[self.ikb(text=text, callback_data="cancel_dl", style=ButtonStyle.DANGER)]])
+        return self.ikm([[self.ikb(text=text, callback_data="cancel_dl")]])
 
     def controls(
         self,
@@ -25,19 +25,19 @@ class Inline:
     ) -> types.InlineKeyboardMarkup:
         keyboard = []
         if status:
-            keyboard.append([self.ikb(text=status, callback_data=f"controls status {chat_id}", style=ButtonStyle.PRIMARY)])
+            keyboard.append([self.ikb(text=status, callback_data=f"controls status {chat_id}")])
         elif timer:
-            keyboard.append([self.ikb(text=timer, callback_data=f"controls status {chat_id}", style=ButtonStyle.PRIMARY)])
+            keyboard.append([self.ikb(text=timer, callback_data=f"controls status {chat_id}")])
         
         if not remove:
             
             keyboard.append(
                 [
-                    self.ikb(text="▷", callback_data=f"controls resume {chat_id}", style=ButtonStyle.PRIMARY),
-                    self.ikb(text="⥁", callback_data=f"controls replay {chat_id}", style=ButtonStyle.DANGER),
-                    self.ikb(text="II", callback_data=f"controls pause {chat_id}", style=ButtonStyle.PRIMARY, icon_custom_emoji_id="6185994856163185048"),
-                    self.ikb(text="▢", callback_data=f"controls stop {chat_id}", style=ButtonStyle.DANGER),
-                    self.ikb(text="‣‣I", callback_data=f"controls skip {chat_id}", style=ButtonStyle.PRIMARY),    
+                    self.ikb(text="▷", callback_data=f"controls resume {chat_id}"),
+                    self.ikb(text="⥁", callback_data=f"controls replay {chat_id}"),
+                    self.ikb(text="II", callback_data=f"controls pause {chat_id}"),
+                    self.ikb(text="▢", callback_data=f"controls stop {chat_id}"),
+                    self.ikb(text="‣‣I", callback_data=f"controls skip {chat_id}"),    
                 ]
             )
             
@@ -49,8 +49,8 @@ class Inline:
     def help_markup(self, _lang: dict, back: bool = False) -> types.InlineKeyboardMarkup:
         if back:
             rows = [[
-                self.ikb(text=f"{_lang['back']}", callback_data="help back", style=ButtonStyle.DANGER ),
-                self.ikb(text=f"{_lang['close']}", callback_data="help close", style=ButtonStyle.DANGER),
+                self.ikb(text=f"{_lang['back']}", callback_data="help back"),
+                self.ikb(text=f"{_lang['close']}", callback_data="help close"),
             ]]
         else:
             cbs = ["admins", "auth", "blist", "lang", "ping", "play", "queue", "stats", "sudo"]
@@ -72,14 +72,14 @@ class Inline:
         return self.ikm(rows)
 
     def ping_markup(self, text: str) -> types.InlineKeyboardMarkup:
-        return self.ikm([[self.ikb(text=text, url=config.SUPPORT_CHAT, style=ButtonStyle.PRIMARY)]])
+        return self.ikm([[self.ikb(text=text, url=config.SUPPORT_CHAT)]])
 
     def play_queued(self, chat_id: int, item_id: str, _text: str) -> types.InlineKeyboardMarkup:
-        return self.ikm([[self.ikb(text=_text, callback_data=f"controls force {chat_id} {item_id}", style=ButtonStyle.PRIMARY)]])
+        return self.ikm([[self.ikb(text=_text, callback_data=f"controls force {chat_id} {item_id}")]])
 
     def queue_markup(self, chat_id: int, _text: str, playing: bool) -> types.InlineKeyboardMarkup:
         _action = "pause" if playing else "resume"
-        return self.ikm([[self.ikb(text=_text, callback_data=f"controls {_action} {chat_id} q", style=ButtonStyle.PRIMARY)]])
+        return self.ikm([[self.ikb(text=_text, callback_data=f"controls {_action} {chat_id} q")]])
 
     def settings_markup(
         self, lang: dict, admin_only: bool, cmd_delete: bool, language: str, chat_id: int
@@ -88,7 +88,7 @@ class Inline:
             [
                 [
                     self.ikb(text=f"• {lang['play_mode']}", callback_data="settings"),
-                    self.ikb(text=str(admin_only), callback_data="settings play", style=ButtonStyle.PRIMARY),
+                    self.ikb(text=str(admin_only), callback_data="settings play"),
                 ],
                 [
                     self.ikb(text=f"• {lang['cmd_delete']}", callback_data="settings"),
@@ -104,28 +104,26 @@ class Inline:
     def start_key(self, lang: dict, private: bool = False) -> types.InlineKeyboardMarkup:
         if not private:
             rows = [
-                [self.ikb(text=f"{lang['add_me']}", url=f"https://t.me/{app.username}?startgroup=true", style=ButtonStyle.PRIMARY)],
-                [self.ikb(text=f"{lang['language']}", callback_data="language", style=ButtonStyle.DANGER)],
+                [self.ikb(text=f"{lang['add_me']}", url=f"https://t.me/{app.username}?startgroup=true")],
+                [self.ikb(text=f"{lang['language']}", callback_data="language")],
             ]
         else:
             rows = [
                 [self.ikb(text=f"{lang['add_me']}", url=f"https://t.me/{app.username}?startgroup=true", style=ButtonStyle.PRIMARY,icon_custom_emoji_id="6183677764256666403")],
                 [self.ikb(text=f"{lang['help']}", callback_data="help", style=ButtonStyle.DANGER, icon_custom_emoji_id="5384466886857614542")],
                 [
-                    self.ikb(text=f"{lang['support']}", url=config.SUPPORT_CHAT, style=ButtonStyle.SUCCESS, icon_custom_emoji_id="6208548360794677149"),
-                    self.ikb(text=f"{lang['channel']}", url=config.SUPPORT_CHANNEL, style=ButtonStyle.SUCCESS,icon_custom_emoji_id="6208548360794677149"),
+                    self.ikb(text=f"{lang['support']}", url=config.SUPPORT_CHAT, icon_custom_emoji_id="6208548360794677149"),
+                    self.ikb(text=f"{lang['channel']}", url=config.SUPPORT_CHANNEL,icon_custom_emoji_id="6208548360794677149"),
                 ],
-                [
-                    self.ikb(text=f"{lang['source']}", user_id=config.OWNER_ID, style=ButtonStyle.PRIMARY, icon_custom_emoji_id="6208694634495876948"),
-                    self.ikb(text=f"𝑪𝒓𝒂𝒕𝒆𝒓", user_id=config.CREATOR, style=ButtonStyle.PRIMARY,icon_custom_emoji_id="6185994856163185048"),
-                ]
+                [self.ikb(text=f"{lang['source']}", user_id=config.OWNER_ID, icon_custom_emoji_id="6208694634495876948")]
+                
             ]
         return self.ikm(rows)
 
     def yt_key(self, link: str) -> types.InlineKeyboardMarkup:
         return self.ikm(
             [[
-                self.ikb(text="❐", copy_text=link, style=ButtonStyle.PRIMARY),
-                self.ikb(text="Youtube", url=link, style=ButtonStyle.DANGER),
+                self.ikb(text="❐", copy_text=link),
+                self.ikb(text="Youtube", url=link),
             ]]
         )

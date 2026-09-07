@@ -42,7 +42,7 @@ class Inline:
             )
             
             keyboard.append(
-                [self.ikb(text=f"{_lang['close']}", callback_data="help close", style=ButtonStyle.DANGER, icon_custom_emoji_id="6095794508518137100")]
+                [self.ikb(text=f"{_lang['close']}", callback_data="help close",  icon_custom_emoji_id="6095794508518137100")]
             )
         return self.ikm(keyboard)
 
@@ -54,7 +54,7 @@ class Inline:
             ]]
         else:
             cbs = ["admins", "auth", "blist", "lang", "ping", "play", "queue", "stats", "sudo"]
-            buttons = [self.ikb(text=f"✦ {_lang[f'help_{i}']}", callback_data=f"help {cb}", style=ButtonStyle.PRIMARY) for i, cb in enumerate(cbs)]
+            buttons = [self.ikb(text=f"✦ {_lang[f'help_{i}']}", callback_data=f"help {cb}") for i, cb in enumerate(cbs)]
             rows = [buttons[i:i + 3] for i in range(0, len(buttons), 3)]
         return self.ikm(rows)
 

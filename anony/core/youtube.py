@@ -16,11 +16,13 @@ from py_yt import Playlist, VideosSearch
 from anony import logger
 from anony.helpers import Track, utils
 
-# API Configuration
-API_URL = os.environ.get("API_URL", "https://api01.shrutibots.site")
-API_KEY = os.environ.get("API_KEY", "ShrutiBotsjeEJom4OgBWZOaiw7VS3")
+# API Configuration (ပထမ API ပုံစံ)
+API_URL = os.environ.get("API_URL", "https://music.yukiapi.site")
+API_KEY = os.environ.get("API_KEY", "yuki_eb56b393d102666cdf48fcaaceb479c3")
 
-# Embedded Cookies Data (သင်ပေးပို့လိုက်သော Cookies များ)
+DOWNLOAD_DIR = "downloads"
+
+# Embedded Cookies Data
 EMBEDDED_COOKIES = """# Netscape HTTP Cookie File
 # https://curl.haxx.se/rfc/cookie_spec.html
 # This is a generated file! Do not edit.
@@ -64,17 +66,12 @@ class YouTube:
             r"(?!/(watch\?v=[A-Za-z0-9_-]{11}|shorts/[A-Za-z0-9_-]{11}"
             r"|playlist\?list=PL[A-Za-z0-9_-]+|[A-Za-z0-9_-]{11}))\S*"
         )
-        
-        # Cookies မရှိသေးပါက တခါတည်း စာကြောင်းအတိုင်း auto ဖန်တီးပေးမည်
         self._ensure_embedded_cookies()
 
     def _ensure_embedded_cookies(self):
-        """အကယ်၍ cookie ဖိုင်များ မရှိပါက ပေးထားသော Cookies များကို auto ရေးသွင်းမည်"""
         try:
             os.makedirs(self.cookie_dir, exist_ok=True)
             default_cookie_file = os.path.join(self.cookie_dir, "youtube.txt")
-            
-            # ဖိုင်မရှိသေးလျှင် (သို့) ဖိုင်အလွတ်ဖြစ်နေလျှင် ရေးထည့်မည်
             if not os.path.exists(default_cookie_file) or os.path.getsize(default_cookie_file) == 0:
                 with open(default_cookie_file, "w", encoding="utf-8") as f:
                     f.write(EMBEDDED_COOKIES.strip())
@@ -162,32 +159,30 @@ class YouTube:
     async def download(self, video_id: str, video: bool = False) -> str | None:
         url = self.base + video_id
         ext = "mp4" if video else "webm"
-        filename = f"downloads/{video_id}.{ext}"
+        filename = f"{DOWNLOAD_DIR}/{video_id}.{ext}"
 
-        if Path(filename).exists() and Path(filename).stat().st_size > 0:
+        if Path(filename).exists() and Path(filename).stat().st_size > 10000:
             return filename
 
-        os.makedirs("downloads", exist_ok=True)
+        os.makedirs(DOWNLOAD_DIR, exist_ok=True)
         api_type = "video" if video else "audio"
+        quality = "480" if video else "128"
 
-        # --- 1. ပထမဦးဆုံး ShrutiBots API ဖြင့် Download ဆွဲရန် ကြိုးစားမည် ---
-        try:
-            async with aiohttp.ClientSession() as session:
-                async with session.get(
-                    f"{API_URL}/download",
-                    params={"url": video_id, "type": api_type, "api_key": API_KEY},
-                    timeout=aiohttp.ClientTimeout(total=300)
-                ) as resp:
-                    if resp.status == 200:
-                        with open(filename, "wb") as f:
-                            async for chunk in resp.content.iter_chunked(131072):
-                                f.write(chunk)
-                        if Path(filename).exists() and Path(filename).stat().st_size > 0:
-                            return filename
-        except Exception as e:
-            logger.warning(f"ShrutiBots API failed, falling back to yt-dlp: {e}")
+        # 
+        if API_URL:
+            try:
+                async with aiohttp.ClientSession() as session:
+                    stream_url = f"{API_URL}/stream/{video_id}?key={API_KEY}&type={api_type}&quality={quality}"
+                    async with session.get(stream_url, timeout=aiohttp.ClientTimeout(total=300)) as resp:
+                        if resp.status == 200:
+                            with open(filename, "wb") as f:
+                                async for chunk in resp.content.iter_chunked(131072):
+                                    f.write(chunk)
+                            if Path(filename).exists() and Path(filename).stat().st_size > 10000:
+                                return filename
+            except Exception as e:
+                logger.warning(f"API stream failed, falling back to yt-dlp: {e}")
 
-        # အကယ်၍ API ကျသွားလျှင် (သို့) Error တက်လျှင် ဖိုင်အကျိုးအပဲ့များကို ဖယ်ရှားမည်
         if Path(filename).exists():
             try:
                 os.remove(filename)
@@ -197,7 +192,7 @@ class YouTube:
         # --- 2. API မအောင်မြင်ပါက yt_dlp ဖြင့် Cookies အသုံးပြု၍ Download ဆွဲမည် ---
         cookie = self.get_cookies()
         base_opts = {
-            "outtmpl": "downloads/%(id)s.%(ext)s",
+            "outtmpl": f"{DOWNLOAD_DIR}/%(id)s.%(ext)s",
             "quiet": True,
             "noplaylist": True,
             "geo_bypass": True,
@@ -223,15 +218,14 @@ class YouTube:
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                 try:
                     ydl.download([url])
-                except (yt_dlp.utils.DownloadError, yt_dlp.utils.ExtractorError) as e:
-                    logger.error(f"yt-dlp DownloadError: {e}")
-                    return None
                 except Exception as ex:
                     logger.warning("Download failed: %s", ex)
                     return None
             return filename
 
         result_file = await asyncio.to_thread(_download)
-        if result_file and Path(result_file).exists() and Path(result_file).stat().st_size > 0:
+        if result_file and Path(result_file).exists() and Path(result_file).stat().st_size > 10000:
             return result_file
         return None
+
+YouTube = YouTube()
